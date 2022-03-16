@@ -11,9 +11,9 @@ This is the code repository for sample code to locally generate IoT device data 
 
 ### Script Details
 
-The script generates random values (within a reasonable range) for each of the four parameters- Flow, Temperature, Humidity and Sound. You can tweak the values by changing the *`random.randint(min, max)`* values corresponding to each parameter. 
+The script generates random values (within a reasonable range) for each of the three parameters- Heart Rate, Oxygen Level, and Blood Pressure, with 20% chance of an abnormal reading appearing randomly (to signal an alert for the doctors). 
 
-The script is set to generate messages of each of the four types in a fixed percentage. If you want more or less messages of a particular parameter, you can change the values of *`rnd`* in the *`if...else`* part of the code. 
+This script was originally taken from [aws-samples](https://github.com/aws-samples/sbs-iot-data-generator).
 
 ### Running Example
 
@@ -21,14 +21,28 @@ The script is set to generate messages of each of the four types in a fixed perc
 
 ## Run the script on Amazon EC2 Instance
 
-If for some reason you are unable to run this script on your local machine, or prefer to host it externally, you can run it from an Amazon EC2 instance. Follow these steps:
+To run it from an Amazon EC2 instance. Follow these steps:
 
 1. Create an IAM role with a policy that gives access to IoT (example: AWSIoTFullAccess)
 2. Launch a new EC2 instance and assign it the IoT IAM role at launch
 3. Login to the EC2 instance and change to root user `sudo su`
 4. Set your default region and output format in `aws configure`
-- default region: ap-southeast-1
-- output format: json
+> Access Key ID: \<your access key> <br>
+Secret Access Key: \<your secret access key> <br>
+Default region: ap-southeast-1 <br>
+Default output format: json
 5. Upload `sbs.py` file to EC2, or `nano sbs.py`, copy the entire script, save and exit
 6. ~~Make sure you have boto3 installed. If not, type `pip install boto3`~~
 7. ~~Run `python sbs.py`~~
+6. Check if you have pip with `pip --version`
+7. Use pip to install Pipenv: `pip install --user pipenv`
+8. Install boto3 package: `pipenv install boto3`
+9. Run `sbs.py` from ec2: `pipenv run python sbs.py`
+
+## Retrieve data using IoT Rules:
+
+1. Go to AWS IoT Rules and create a new rule
+2. Include rule query statement: `SELECT * FROM '/sbs/devicedata/#'`
+> keep the topic filter (/sbs/devicedata/#') the same unless you change it in the sbs.py file
+3. Select what you want to do with the data (action):
+> E.g. Send a message to an SQS queue (but you will have to create the queue in advance)
