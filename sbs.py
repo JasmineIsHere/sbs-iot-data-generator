@@ -11,73 +11,69 @@ import time
 
 deviceNames = ['SBS01', 'SBS02', 'SBS03', 'SBS04', 'SBS05']
 
-iot = boto3.client('iot-data');
+iot = boto3.client('iot-data')
 
-# generate Flow values
-def getFlowValues():
+# generate Heart Rate values
+def getHeartRateValues():
     data = {}
-    data['deviceValue'] = random.randint(60, 100)
-    data['deviceParameter'] = 'Flow'
+    healthyHR = random.randint(60,100)
+    unhealthyHR = random.randint(40,120)
+
+    data['deviceValue'] = random.choices([healthyHR, unhealthyHR],[0.8, 0.2])[0]
+    data['deviceParameter'] = 'Heart Rate'
     data['deviceId'] = random.choice(deviceNames)
     data['dateTime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return data
 
-# generate Temperature values
-def getTemperatureValues():
+# generate Oxygen Level values
+def getOxygenLevelValues():
     data = {}
-    data['deviceValue'] = random.randint(15, 35)
-    data['deviceParameter'] = 'Temperature'
+    healthyO2 = random.randint(94,100)
+    unhealthyO2 = random.randint(90,100)
+
+    data['deviceValue'] = random.choices([healthyO2, unhealthyO2],[0.8, 0.2])[0]
+    data['deviceParameter'] = 'Oxygen Level'
     data['deviceId'] = random.choice(deviceNames)
     data['dateTime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return data
 
-# generate Humidity values
-def getHumidityValues():
+# generate Blood Pressure values
+def getBloodPressureValues():
     data = {}
-    data['deviceValue'] = random.randint(50, 90)
-    data['deviceParameter'] = 'Humidity'
-    data['deviceId'] = random.choice(deviceNames)
-    data['dateTime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    return data
+    healthyBP = random.randint(90,120)
+    unhealthyBP = random.randint(80,150)
 
-# generate Sound values
-def getSoundValues():
-    data = {}
-    data['deviceValue'] = random.randint(100, 140)
-    data['deviceParameter'] = 'Sound'
+    data['deviceValue'] = random.choices([healthyBP, unhealthyBP],[0.8, 0.2])[0]
+    data['deviceParameter'] = 'Blood Pressure'
     data['deviceId'] = random.choice(deviceNames)
     data['dateTime'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return data
 
 # Generate each parameter's data input in varying proportions
-while True:
+LIMIT = 500 #iot output limit - just to not exceed SQS free-tier (1 million requests per month)
+count = 0
+while count < LIMIT:
+    count += 1
     time.sleep(1)
     rnd = random.random()
-    if (0 <= rnd < 0.20):
-        data = json.dumps(getFlowValues())
-        print data
+    if (0 <= rnd < 0.30):
+        data = json.dumps(getHeartRateValues())
+        print (data)
         response = iot.publish(
-             topic='/sbs/devicedata/flow',
+             topic='/sbs/devicedata/heart',
              payload=data
         ) 
-    elif (0.20<= rnd < 0.55):
-        data = json.dumps(getTemperatureValues())
-        print data
+    elif (0.30<= rnd < 0.60):
+        data = json.dumps(getOxygenLevelValues())
+        print (data)
         response = iot.publish(
-             topic='/sbs/devicedata/temperature',
-             payload=data
-        )
-    elif (0.55<= rnd < 0.70):
-        data = json.dumps(getHumidityValues())
-        print data
-        response = iot.publish(
-             topic='/sbs/devicedata/humidity',
+             topic='/sbs/devicedata/oxygen',
              payload=data
         )
     else:
-        data = json.dumps(getSoundValues())
-        print data
+        data = json.dumps(getBloodPressureValues())
+        print (data)
         response = iot.publish(
-             topic='/sbs/devicedata/sound',
-             payload=data     
-)
+             topic='/sbs/devicedata/bp',
+             payload=data
+        )

@@ -27,6 +27,8 @@ If for some reason you are unable to run this script on your local machine, or p
 2. Launch a new EC2 instance and assign it the IoT IAM role at launch
 3. Login to the EC2 instance and change to root user `sudo su`
 4. Set your default region and output format in `aws configure`
+- default region: ap-southeast-1
+- output format: json
 5. Upload `sbs.py` file to EC2, or `nano sbs.py`, copy the entire script, save and exit
-6. Make sure you have boto3 installed. If not, type `pip install boto3`
-7. Run `python sbs.py`
+6. ~~Make sure you have boto3 installed. If not, type `pip install boto3`~~
+7. ~~Run `python sbs.py`~~
