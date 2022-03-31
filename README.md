@@ -69,17 +69,18 @@ To test this on your own AWS account, you will need the following service set up
 
 IoT Rule is used to read MQTT messages hence when creating a new IoT rule, you need to specify the source of your messages (the topic you are subscribing to) in the *Rule Query Statement* and what you want to do with the message with *Actions*.
 
-<image></image>
+<img width="671" alt="image" src="https://user-images.githubusercontent.com/61452236/161035283-67b0ef49-aad6-437d-9e04-272e451e36b4.png">
 *In this case, I have my IoT Rule subsribed to all the messages from the `/alert` topic and it will send a message to Lambda when the rule is triggered*
 
-
+<br>
 To test your IoT Rule is working properly, you can make use of the MQTT test client in AWS IoT Core to subscribe/publish to a topic.
-<image></image>
+<img width="719" alt="image" src="https://user-images.githubusercontent.com/61452236/161035356-9dde756e-eb88-4eb1-ab63-372970622e41.png">
 
 ### AWS Lambda
 The Lambda service will execute upon a trigger. In this case, the trigger is the AWS IoT rule. When creating a new Lmabda function, use the runtime `Python 3.9` and paste the `lambda_from_iot_to_sns.py` into the Code Source.
 Remember to always "Deploy" any changes to the code in order to save the latest version. 
-<image><image>
+<img width="872" alt="image" src="https://user-images.githubusercontent.com/61452236/161035631-330b423d-e466-415a-8597-0cacf4d30768.png">
+    
 <br>
 You may test the service directly by creating a new test event and passing in the sample JSON input into the Event JSON.
-<image><image>
+<img width="550" alt="image" src="https://user-images.githubusercontent.com/61452236/161035544-8957101e-d376-4d9d-a650-09f565f42d63.png">
