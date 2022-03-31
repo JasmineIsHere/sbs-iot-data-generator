@@ -70,6 +70,7 @@ To test this on your own AWS account, you will need the following service set up
 IoT Rule is used to read MQTT messages hence when creating a new IoT rule, you need to specify the source of your messages (the topic you are subscribing to) in the *Rule Query Statement* and what you want to do with the message with *Actions*.
 
 <img width="671" alt="image" src="https://user-images.githubusercontent.com/61452236/161035283-67b0ef49-aad6-437d-9e04-272e451e36b4.png">
+
 *In this case, I have my IoT Rule subsribed to all the messages from the `/alert` topic and it will send a message to Lambda when the rule is triggered*
 
 <br>
